@@ -1,0 +1,29 @@
+services:
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    container_name: caddy
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./certs:/certs
+      - ./config:/config
+      - ./data:/data
+      - ./sites:/srv
+    network_mode: "host"
+
+  nextcloud:
+    image: nextcloud/all-in-one:latest
+    restart: unless-stopped
+    container_name: nextcloud-aio-mastercontainer
+    ports:
+      - "8080:8080"
+    environment:
+      - APACHE_PORT=11000
+    volumes:
+      - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - caddy
+
+volumes:
+  nextcloud_aio_mastercontainer:
