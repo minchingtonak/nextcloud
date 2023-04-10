@@ -11,7 +11,7 @@ services:
       - ./sites:/srv
     network_mode: "host"
 
-  nextcloud:
+  nextcloud-aio-mastercontainer:
     image: nextcloud/all-in-one:latest
     restart: unless-stopped
     container_name: nextcloud-aio-mastercontainer
@@ -27,3 +27,4 @@ services:
 
 volumes:
   nextcloud_aio_mastercontainer:
+    name: nextcloud_aio_mastercontainer
