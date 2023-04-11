@@ -1,4 +1,12 @@
 https://cloud.domain.com:443 {
+    log {
+        level INFO
+        output file /data/caddy.log {
+            roll_size 10MB
+            roll_keep 20
+        }
+    }
+
     header Strict-Transport-Security max-age=31536000;
     reverse_proxy localhost:11000
 }
