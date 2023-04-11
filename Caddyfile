@@ -1,7 +1,7 @@
 https://cloud.domain.com:443 {
     log {
         level INFO
-        output file /data/caddy.log {
+        output file /data/caddy/caddy.log {
             roll_size 10MB
             roll_keep 20
         }
