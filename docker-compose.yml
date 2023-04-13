@@ -31,11 +31,10 @@ services:
     image: alpine:latest
     restart: always
     container_name: countryblock
-    depends_on:
-      - vaultwarden
     volumes:
       - ./countryblock/block.sh:/block.sh:ro
       - ./data/countryblock-data:/data
+      - ./data/countryblock-data/block.log:/var/log/block.log
       - ./logrotate/countryblock:/etc/logrotate.d/countryblock:ro
     network_mode: "host"
     privileged: true
@@ -45,8 +44,7 @@ services:
     env_file:
       - ./countryblock/countryblock.env
     command: >
-      sh -c 'apk --update --no-cache add ipset iptables ip6tables wget bash tzdata &&
-             ln -sf /proc/1/fd/1 /var/log/block.log &&
+      sh -c 'apk --update --no-cache add nftables wget bash tzdata &&
              sed -i "/bash \\/block\\.sh update/d" /etc/crontabs/root &&
              echo "$$COUNTRYBLOCK_SCHEDULE bash /block.sh update" >> /etc/crontabs/root &&
              crond -d 8 &&
