@@ -25,32 +25,21 @@ services:
     depends_on:
       - caddy
 
-  countryblock:
-    # The block script will block any country
-    # Requires cap_add as listed and privileged because it uses iptables and ipset
-    image: alpine:latest
+  fail2ban:
+    image: crazymax/fail2ban:latest
+    container_name: fail2ban
     restart: always
-    container_name: countryblock
-    depends_on:
-      - vaultwarden
-    volumes:
-      - ./countryblock/block.sh:/block.sh:ro
-      - ./data/countryblock-data:/data
-      - ./logrotate/countryblock:/etc/logrotate.d/countryblock:ro
     network_mode: "host"
-    privileged: true
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    volumes:
+      - ./data/fail2ban:/data
+      - ./fail2ban/jail.d:/etc/fail2ban/jail.d:ro
+      - ./fail2ban/filter.d:/etc/fail2ban/filter.d:ro
+      - ./logrotate/fail2ban:/etc/logrotate.d/fail2ban:ro
     env_file:
-      - ./countryblock/countryblock.env
-    command: >
-      sh -c 'apk --update --no-cache add ipset iptables ip6tables wget bash tzdata &&
-             ln -sf /proc/1/fd/1 /var/log/block.log &&
-             sed -i "/bash \\/block\\.sh update/d" /etc/crontabs/root &&
-             echo "$$COUNTRYBLOCK_SCHEDULE bash /block.sh update" >> /etc/crontabs/root &&
-             crond -d 8 &&
-             bash /block.sh start'
+      - ./fail2ban/fail2ban.env
 
 volumes:
   nextcloud_aio_mastercontainer:
