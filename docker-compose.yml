@@ -29,13 +29,16 @@ services:
     image: crazymax/fail2ban:latest
     container_name: fail2ban
     restart: always
+    build:
+      context: ./fail2ban
+      dockerfile: Dockerfile
     network_mode: "host"
     cap_add:
       - NET_ADMIN
       - NET_RAW
     volumes:
       - ./data/fail2ban:/data
-      - nextcloud_aio_mastercontainer:/nextcloud-data:ro
+      - /var/lib/docker/volumes/nextcloud_aio_nextcloud/_data/data/nextcloud.log:/nextcloud.log:ro
       - ./fail2ban/jail.d:/etc/fail2ban/jail.d:ro
       - ./fail2ban/filter.d:/etc/fail2ban/filter.d:ro
       - ./logrotate/fail2ban:/etc/logrotate.d/fail2ban:ro

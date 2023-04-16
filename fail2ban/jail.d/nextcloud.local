@@ -8,4 +8,4 @@ filter = nextcloud
 maxretry = 3
 bantime = 86400
 findtime = 43200
-logpath = /nextcloud-data/data/nextcloud.log
+logpath = /nextcloud.log
