@@ -35,6 +35,7 @@ services:
       - NET_RAW
     volumes:
       - ./data/fail2ban:/data
+      - nextcloud_aio_mastercontainer:/nextcloud-data:ro
       - ./fail2ban/jail.d:/etc/fail2ban/jail.d:ro
       - ./fail2ban/filter.d:/etc/fail2ban/filter.d:ro
       - ./logrotate/fail2ban:/etc/logrotate.d/fail2ban:ro
